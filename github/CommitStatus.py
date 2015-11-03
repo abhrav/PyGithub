@@ -33,6 +33,13 @@ class CommitStatus(github.GithubObject.NonCompletableGithubObject):
     """
     This class represents CommitStatuss as returned for example by http://developer.github.com/v3/todo
     """
+    
+    @property
+    def context(self):
+        """
+        :type: string
+        """
+        return self._context.value
 
     @property
     def created_at(self):
@@ -91,6 +98,7 @@ class CommitStatus(github.GithubObject.NonCompletableGithubObject):
         return self._url.value
 
     def _initAttributes(self):
+        self._context = github.GithubObject.NotSet
         self._created_at = github.GithubObject.NotSet
         self._creator = github.GithubObject.NotSet
         self._description = github.GithubObject.NotSet
@@ -101,6 +109,8 @@ class CommitStatus(github.GithubObject.NonCompletableGithubObject):
         self._url = github.GithubObject.NotSet
 
     def _useAttributes(self, attributes):
+        if "context" in attributes:  # pragma no branch
+            self._context = self._makeStringAttribute(attributes["context"])
         if "created_at" in attributes:  # pragma no branch
             self._created_at = self._makeDatetimeAttribute(attributes["created_at"])
         if "creator" in attributes:  # pragma no branch
