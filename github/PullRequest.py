@@ -494,20 +494,24 @@ class PullRequest(github.GithubObject.CompletableGithubObject):
         )
         return status == 204
 
-    def merge(self, commit_message=github.GithubObject.NotSet):
+    def merge(self, commit_message=github.GithubObject.NotSet, squash_commits=github.GithubObject.NotSet):
         """
         :calls: `PUT /repos/:owner/:repo/pulls/:number/merge <http://developer.github.com/v3/pulls>`_
         :param commit_message: string
+        :param squash_commits: boolean
         :rtype: :class:`github.PullRequestMergeStatus.PullRequestMergeStatus`
         """
         assert commit_message is github.GithubObject.NotSet or isinstance(commit_message, (str, unicode)), commit_message
         post_parameters = dict()
         if commit_message is not github.GithubObject.NotSet:
             post_parameters["commit_message"] = commit_message
+        if squash_message is not github.GithubObject.NotSet:
+            post_parameters["squash_commits"] = squash_commits
         headers, data = self._requester.requestJsonAndCheck(
             "PUT",
             self.url + "/merge",
             input=post_parameters
+            headers={'Accept': 'application/vnd.github.loki-preview+json'}
         )
         return github.PullRequestMergeStatus.PullRequestMergeStatus(self._requester, headers, data, completed=True)
 
