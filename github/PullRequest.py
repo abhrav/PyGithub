@@ -511,7 +511,7 @@ class PullRequest(github.GithubObject.CompletableGithubObject):
             "PUT",
             self.url + "/merge",
             input=post_parameters
-            headers={'Accept': 'application/vnd.github.loki-preview+json'}
+            headers={'Accept': 'application/vnd.github.polaris-preview+json'}
         )
         return github.PullRequestMergeStatus.PullRequestMergeStatus(self._requester, headers, data, completed=True)
 
