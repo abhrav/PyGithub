@@ -499,8 +499,8 @@ class PullRequest(github.GithubObject.CompletableGithubObject):
         github._api_preview = True
         status, headers, data = self._requester.requestJson(
             "GET",
-            self.url + "/merge"
-            #headers={'Accept': 'application/vnd.github.polaris-preview+json'}
+            self.url + "/merge",
+            headers={'Accept': 'application/vnd.github.polaris-preview+json'}
 
         )
         return status == 204
@@ -512,6 +512,7 @@ class PullRequest(github.GithubObject.CompletableGithubObject):
         :param squash: boolean
         :rtype: :class:`github.PullRequestMergeStatus.PullRequestMergeStatus`
         """
+        squash = True
         assert commit_message is github.GithubObject.NotSet or isinstance(commit_message, (str, unicode)), commit_message
         post_parameters = dict()
         if commit_message is not github.GithubObject.NotSet:
@@ -522,7 +523,8 @@ class PullRequest(github.GithubObject.CompletableGithubObject):
         headers, data = self._requester.requestJsonAndCheck(
             "PUT",
             self.url + "/merge",
-            input=post_parameters
+            input=post_parameters,
+            headers={'Accept': 'application/vnd.github.polaris-preview+json'}
         )
         return github.PullRequestMergeStatus.PullRequestMergeStatus(self._requester, headers, data, completed=True)
 
